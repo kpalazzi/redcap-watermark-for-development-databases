@@ -1,0 +1,48 @@
+{
+    "name": "Watermark For Development Databases",
+    "description": "A REDCap module to display a watermark on projects in development status to alert users not to collect real participant data",
+    "namespace": "HMRI\\WatermarkForDevelopmentDatabases",
+    "documentation": "README.md",
+    "framework-version": 3,
+    "permissions": [
+        "redcap_every_page_top",
+        "redcap_data_entry_form",
+        "redcap_survey_page"
+    ],
+    "authors": [
+        {
+            "name": "Kerrin Palazzi",
+            "email": "kerrin.palazzi@hmri.org.au",
+            "institution": "HMRI"
+        }
+    ],
+    "compatibility": {
+        "redcap-version-min": "9.1.1"
+    },
+    "project-settings": [
+        {
+            "key": "watermark-text",
+            "name": "Watermark text (cannot be missing; default = TEST DATA ONLY)",
+            "required": true,
+            "type": "text",
+            "default": "TEST DATA ONLY",
+            "help-text": "The text displayed as the watermark on all development-mode pages. Cannot be blank or contain only spaces. Default: TEST DATA ONLY"
+        },
+        {
+            "key": "watermark-color",
+            "name": "Watermark colour (hex code including #; default = #F26600 orange)",
+            "required": false,
+            "type": "text",
+            "default": "#F26600",
+            "help-text": "A 3- or 6-digit hex colour code, including the # symbol (e.g. #F26600 for orange, #CC0000 for red). White (#fff / #ffffff) is not permitted on data entry or dashboard pages but is allowed on surveys. Invalid or missing values fall back to #F26600."
+        },
+        {
+            "key": "watermark-opacity",
+            "name": "Watermark opacity (0.1 – 1.0; default = 0.2)",
+            "required": false,
+            "type": "text",
+            "default": "0.2",
+            "help-text": "Controls how visible the watermark is. Enter a number between 0.1 (nearly invisible) and 1.0 (fully opaque). Values below 0.1 are clamped to 0.1. Default: 0.2"
+        }
+    ]
+}
