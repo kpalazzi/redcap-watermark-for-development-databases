@@ -3,12 +3,7 @@
     "description": "A REDCap module to display a watermark on projects in development status to alert users not to collect real participant data",
     "namespace": "HMRI\\WatermarkForDevelopmentDatabases",
     "documentation": "README.md",
-    "framework-version": 3,
-    "permissions": [
-        "redcap_every_page_top",
-        "redcap_data_entry_form",
-        "redcap_survey_page"
-    ],
+    "framework-version": 16,
     "authors": [
         {
             "name": "Kerrin Palazzi",
@@ -16,9 +11,6 @@
             "institution": "HMRI"
         }
     ],
-    "compatibility": {
-        "redcap-version-min": "9.1.1"
-    },
     "project-settings": [
         {
             "key": "watermark-text",
