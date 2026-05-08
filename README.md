@@ -46,15 +46,15 @@ In Development status, the watermark looks like this:
 
 - Record Status Dashboard:
 
-![](img/record_status_dashboard.png)
+![](record_status_dashboard.png)
 
 - Data Entry Form:
 
-![](img/data_entry_form.png)
+![](data_entry_form.png)
 
 - Survey
 
-![](img/survey.png)
+![](survey.png)
 
 
 
