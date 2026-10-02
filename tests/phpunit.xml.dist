@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Run from the module folder: php <path-to>/phpunit -c tests/phpunit.xml.dist  (paths below are relative to this file) -->
+<phpunit bootstrap="bootstrap.php" colors="true" failOnWarning="true" failOnRisky="true" cacheResult="false">
+    <testsuites>
+        <testsuite name="Watermark for Development Databases">
+            <directory>.</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>

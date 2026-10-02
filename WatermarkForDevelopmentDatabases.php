@@ -55,32 +55,54 @@ class WatermarkForDevelopmentDatabases extends AbstractExternalModule {
         }
     }
 
-    // For record status dashboard, add/edit records page, and survey distribution.
-    // Also runs on Control Center pages ("enable-every-page-hooks-on-system-pages" in config.json)
-    // so Control Center defaults can be filled in before the Configure dialog loads.
+    /**
+     * Acts on exactly four kinds of page and returns immediately on every other page.
+     * "enable-every-page-hooks-on-system-pages" is set in config.json only so that the
+     * Control Center External Modules page (a system page) is included.
+     *
+     * 1. Control Center > External Modules: fill in missing Control Center defaults, and add
+     *    the Configure dialog helpers (live override labels, colour picker/code sync).
+     * 2. A project's External Modules page: add the project Configure dialog helpers
+     *    (live checks, colour sync, pre-ticked opt-in).
+     * 3. Record status dashboard, add/edit records, survey distribution: show the watermark.
+     * (Data entry forms and surveys use their own hooks below.)
+     */
     function redcap_every_page_top($project_id) {
         $page = PAGE;
 
-        $this->seedDefaultsIfControlCenterModulePage($page, $project_id);
-
-        if ($this->isControlCenterModulePage($page, $project_id)) {
+        // 1. System pages: only the Control Center External Modules page
+        if (empty($project_id)) {
+            if (!$this->isControlCenterModulePage($page, $project_id)) {
+                return;
+            }
+            $this->seedDefaultsIfControlCenterModulePage($page, $project_id);
             $this->outputOverrideNoteToggleScript();
             $this->outputColourSyncScript();
+            return;
         }
 
-        if ($this->isProjectModulePage($page, $project_id) && $this->projectOverridesAllowed()) {
-            $this->outputLiveValidationScript();
-            $this->outputColourSyncScript();
+        // 2. Project External Modules page
+        if ($this->isProjectModulePage($page, $project_id)) {
+            if ($this->projectOverridesAllowed()) {
+                $this->outputLiveValidationScript();
+                $this->outputColourSyncScript();
+            }
+            if ($this->shouldPreTickOptIn($project_id)) {
+                $this->outputOptInPreTickScript();
+            }
+            return;
         }
 
-        if ($this->isProjectModulePage($page, $project_id) && $this->shouldPreTickOptIn($project_id)) {
-            $this->outputOptInPreTickScript();
+        // 3. Watermarked project pages
+        if (!in_array($page, [
+            'DataEntry/record_status_dashboard.php',
+            'DataEntry/record_home.php',
+            'Surveys/invite_participants.php',
+        ], true)) {
+            return;
         }
 
-        if (($page === 'DataEntry/record_status_dashboard.php' ||
-             $page === 'DataEntry/record_home.php' ||
-             $page === 'Surveys/invite_participants.php') &&
-            $this->shouldDisplayWatermark($project_id)) {
+        if ($this->shouldDisplayWatermark($project_id)) {
             $this->displayWatermark($project_id);
         }
     }
