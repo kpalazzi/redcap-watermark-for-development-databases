@@ -4,6 +4,10 @@
     "namespace": "HMRI\\WatermarkForDevelopmentDatabases",
     "documentation": "README.md",
     "framework-version": 16,
+    "enable-every-page-hooks-on-system-pages": true,
+    "compatibility": {
+        "redcap-version-min": "14.1.6"
+    },
     "authors": [
         {
             "name": "Kerrin Palazzi",
@@ -11,30 +15,145 @@
             "institution": "HMRI"
         }
     ],
-    "project-settings": [
+    "system-settings": [
+        {
+            "key": "apply-to",
+            "name": "<span style=\"display:inline-block;margin-left:18px\"><b>Apply watermark to</b>",
+            "required": false,
+            "type": "radio",
+            "default": "all",
+            "choices": [
+                { "value": "all", "name": "All projects (default)" },
+                { "value": "new", "name": "New projects only" }
+            ],
+            "branchingLogic": { "field": "enabled", "value": true }
+        },
+        {
+            "key": "new-project-cutoff",
+            "name": "Cut-off timestamp for 'New projects only' (set automatically)",
+            "type": "text",
+            "hidden": true
+        },
+        {
+            "key": "header-appearance",
+            "name": "<b>Default appearance</b>",
+            "type": "descriptive"
+        },
+        {
+            "key": "allow-project-override",
+            "name": "<b>Allow project-level settings to override these defaults</b>",
+            "required": false,
+            "type": "checkbox",
+            "default": true
+        },
         {
             "key": "watermark-text",
-            "name": "Watermark text (cannot be missing; default = TEST DATA ONLY)",
-            "required": true,
+            "name": "<b>Watermark text</b>",
+            "project-name": "<b>Watermark text</b>",
+            "allow-project-overrides": true,
+            "required": false,
             "type": "text",
-            "default": "TEST DATA ONLY",
-            "help-text": "The text displayed as the watermark on all development-mode pages. Cannot be blank or contain only spaces. Default: TEST DATA ONLY"
+            "default": "TEST DATA ONLY"
+        },
+        {
+            "key": "watermark-color-picker",
+            "name": "<b>Watermark colour</b>",
+            "project-name": "<b>Watermark colour</b>",
+            "allow-project-overrides": true,
+            "required": false,
+            "type": "color-picker",
+            "default": "#F26600"
         },
         {
             "key": "watermark-color",
-            "name": "Watermark colour (hex code including #; default = #F26600 orange)",
+            "name": "<b>Colour code</b> (optional, overrides the picker)<br>e.g. #F26600 or rgb(242,102,0)",
+            "project-name": "<b>Colour code</b> (optional, overrides the picker)<br>e.g. #F26600 or rgb(242,102,0)",
+            "allow-project-overrides": true,
             "required": false,
-            "type": "text",
-            "default": "#F26600",
-            "help-text": "A 3- or 6-digit hex colour code, including the # symbol (e.g. #F26600 for orange, #CC0000 for red). White (#fff / #ffffff) is not permitted on data entry or dashboard pages but is allowed on surveys. Invalid or missing values fall back to #F26600."
+            "type": "text"
         },
         {
             "key": "watermark-opacity",
-            "name": "Watermark opacity (0.1 – 1.0; default = 0.2)",
+            "name": "<b>Watermark opacity</b> (0.1 – 1.0)",
+            "project-name": "<b>Watermark opacity</b> (0.1 – 1.0)",
+            "allow-project-overrides": true,
             "required": false,
             "type": "text",
-            "default": "0.2",
-            "help-text": "Controls how visible the watermark is. Enter a number between 0.1 (nearly invisible) and 1.0 (fully opaque). Values below 0.1 are clamped to 0.1. Default: 0.2"
+            "default": "0.1"
+        },
+        {
+            "key": "watermark-font-size",
+            "name": "<b>Watermark text size</b> (pt, 10 – 300)",
+            "project-name": "<b>Watermark text size</b> (pt, 10 – 300)",
+            "allow-project-overrides": true,
+            "required": false,
+            "type": "text",
+            "default": "90"
+        },
+        {
+            "key": "header-project-limits",
+            "name": "<b>Project limits</b>",
+            "type": "descriptive",
+            "branchingLogic": { "field": "allow-project-override", "value": true }
+        },
+        {
+            "key": "project-min-chars",
+            "name": "<b>Fewest letters or digits in project text</b>",
+            "required": false,
+            "type": "text",
+            "default": "4",
+            "branchingLogic": { "field": "allow-project-override", "value": true }
+        },
+        {
+            "key": "project-min-font-size",
+            "name": "<b>Smallest text size projects can choose</b> (pt)",
+            "required": false,
+            "type": "text",
+            "default": "48",
+            "branchingLogic": { "field": "allow-project-override", "value": true }
+        },
+        {
+            "key": "project-min-opacity",
+            "name": "<b>Lowest opacity projects can choose</b>",
+            "required": false,
+            "type": "text",
+            "default": "0.1",
+            "branchingLogic": { "field": "allow-project-override", "value": true }
+        },
+        {
+            "key": "header-ramp",
+            "name": "<b>Record-count opacity</b>",
+            "type": "descriptive"
+        },
+        {
+            "key": "ramp-enabled",
+            "name": "<b>Increase opacity as a development project fills up</b>",
+            "required": false,
+            "type": "checkbox"
+        },
+        {
+            "key": "ramp-start",
+            "name": "<span style=\"display:inline-block;margin-left:18px\">Start increasing at (records)",
+            "required": false,
+            "type": "text",
+            "default": "20",
+            "branchingLogic": { "field": "ramp-enabled", "value": true }
+        },
+        {
+            "key": "ramp-max",
+            "name": "<span style=\"display:inline-block;margin-left:18px\">Reach maximum at (records)",
+            "required": false,
+            "type": "text",
+            "default": "30",
+            "branchingLogic": { "field": "ramp-enabled", "value": true }
+        }
+    ],
+    "project-settings": [
+        {
+            "key": "opt-in",
+            "name": "<b>Show the watermark on this project</b><br>This project was created before your REDCap administrator limited the watermark to new projects, so it's off unless you tick this",
+            "required": false,
+            "type": "checkbox"
         }
     ]
 }
